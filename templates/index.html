@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PhishGuard | Awareness & Detection Lab</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="top"><div class="brand">PHISH<span>GUARD</span></div><nav><a href="/">Scanner</a><a href="/about">About</a></nav></header>
+<main>
+  <section class="hero">
+    <p class="eyebrow">CYBERSECURITY AWARENESS PROJECT</p>
+    <h1>Spot the bait.<br><span>Stay one step ahead.</span></h1>
+    <p class="sub">A local educational lab that checks email text and URLs for common phishing indicators.</p>
+  </section>
+  <section class="panel">
+    <div class="tabs">
+      <button type="button" class="tab active" id="emailTab" onclick="showForm('email')">Email analysis</button>
+      <button type="button" class="tab" id="urlTab" onclick="showForm('url')">URL analysis</button>
+    </div>
+    <form method="post" id="emailForm" {% if kind == 'url' %}style="display:none"{% endif %}>
+      <input type="hidden" name="kind" value="email">
+      <label>Sender email</label><input name="sender" placeholder="security@example.com" required>
+      <label>Subject</label><input name="subject" placeholder="Example: Urgent account verification">
+      <label>Email message</label><textarea name="body" rows="6" placeholder="Paste sample email text here. Do not paste real passwords, OTPs, or private data."></textarea>
+      <button class="submit" type="submit">Analyze email <span>→</span></button>
+    </form>
+    <form method="post" id="urlForm" {% if kind != 'url' %}style="display:none"{% endif %}>
+      <input type="hidden" name="kind" value="url">
+      <label>Website URL</label><input name="url" placeholder="https://example.com" required>
+      <p class="hint">The tool analyzes the text of the URL only. It does not visit or open the website.</p>
+      <button class="submit" type="submit">Analyze URL <span>→</span></button>
+    </form>
+  </section>
+  {% if result %}
+  <section class="result">
+    <div class="result-head"><div><p class="eyebrow">SCAN RESULT · {{ result.type }}</p><h2>{{ result.risk }} risk</h2></div><div class="score">{{ result.score }}<small>/10</small></div></div>
+    <div class="meter"><div style="width: {{ result.score * 10 }}%"></div></div>
+    <h3>Indicators found</h3><ul>{% for item in result.findings %}<li>{{ item }}</li>{% endfor %}</ul>
+    <div class="advice"><strong>Recommended action</strong><p>{{ result.recommendation }}</p></div>
+  </section>
+  {% endif %}
+  <section class="notice"><strong>Learning tool, not a verdict.</strong> A low score does not mean a message or website is safe. Never enter real credentials into a simulation.</section>
+</main>
+<footer>PHISHGUARD · Student Cybersecurity Project · Runs locally</footer>
+<script>
+function showForm(which) {
+  document.getElementById('emailForm').style.display = which === 'email' ? 'block' : 'none';
+  document.getElementById('urlForm').style.display = which === 'url' ? 'block' : 'none';
+  document.getElementById('emailTab').classList.toggle('active', which === 'email');
+  document.getElementById('urlTab').classList.toggle('active', which === 'url');
+}
+showForm("{{ kind }}");
+</script>
+</body></html>

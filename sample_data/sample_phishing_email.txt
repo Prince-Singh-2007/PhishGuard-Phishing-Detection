@@ -1,0 +1,9 @@
+From: security-alert@example-mail.test
+Subject: URGENT: Account suspended - verify now
+
+Dear customer,
+Unusual activity was detected. Your account may be suspended.
+Please sign in immediately and verify your password and OTP:
+http://bit.ly/demo-example
+
+This is fictional training data. Do not send it to anyone.
